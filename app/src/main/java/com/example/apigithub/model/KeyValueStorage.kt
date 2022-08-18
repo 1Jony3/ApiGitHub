@@ -4,12 +4,15 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log.d
 
-object KEYS{
-    const val NAME_KEY = "KEY_VALUE_STORAGE"
-    const val NAME_TOKEN = "TOKEN"
-    const val NAME_USERNAME = "USERNAME"
-}
+
 class KeyValueStorage constructor(context: Context) {
+
+    object KEYS{
+        const val NAME_KEY = "KEY_VALUE_STORAGE"
+        const val NAME_TOKEN = "TOKEN"
+        const val NAME_USERNAME = "USERNAME"
+    }
+
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(KEYS.NAME_KEY, Context.MODE_PRIVATE)
 

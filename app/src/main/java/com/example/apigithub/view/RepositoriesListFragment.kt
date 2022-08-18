@@ -12,11 +12,11 @@ import com.example.apigithub.databinding.RepositoriesListFragmentBinding
 import com.example.apigithub.model.KeyValueStorage
 import com.example.apigithub.model.api.Common
 import com.example.apigithub.model.entities.Repo
-import com.example.apigithub.model.repository.RepositoryImp
-import com.example.apigithub.presenter.adapter.GitHubAdapter
-import com.example.apigithub.presenter.auth.viewModelFactory
-import com.example.apigithub.presenter.clicker.OnClickListener
-import com.example.apigithub.presenter.list.RepositoriesListViewModel
+import com.example.apigithub.model.repository.AppRepository
+import com.example.apigithub.viewModels.adapter.RepoAdapter
+import com.example.apigithub.viewModels.auth.ViewModelFactory
+import com.example.apigithub.viewModels.clicker.OnClickListener
+import com.example.apigithub.viewModels.list.RepositoriesListViewModel
 
 class RepositoriesListFragment : Fragment() {
 
@@ -28,8 +28,8 @@ class RepositoriesListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(
             this,
-            viewModelFactory(
-                RepositoryImp(Common.retrofitService), KeyValueStorage(context!!.applicationContext)
+            ViewModelFactory(
+                AppRepository(Common.retrofitService), KeyValueStorage(context!!.applicationContext)
             )
         ).get(RepositoriesListViewModel::class.java)
 
@@ -42,7 +42,6 @@ class RepositoriesListFragment : Fragment() {
         binding.repositoriesList.layoutManager = layoutManager
 
         viewModel.repoList.observe(this, {
-
             binding.repositoriesList.adapter = setAdapter(it)
         })
 
@@ -51,8 +50,12 @@ class RepositoriesListFragment : Fragment() {
         return view
     }
 
-    private fun setAdapter(repo: List<Repo>): GitHubAdapter{
-        return GitHubAdapter(repo)
+    private fun setAdapter(repo: List<Repo>): RepoAdapter{
+        return RepoAdapter(repo)
+    }
+
+    companion object{
+        const val ARG_USER_NAME = "userName"
     }
 
 }

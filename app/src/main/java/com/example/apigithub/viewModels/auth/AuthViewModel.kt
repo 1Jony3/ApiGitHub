@@ -1,4 +1,4 @@
-package com.example.apigithub.presenter.auth
+package com.example.apigithub.viewModels.auth
 
 import android.util.Log.d
 import android.view.View
@@ -15,7 +15,7 @@ class AuthViewModel constructor(private val repository: Repository, private val 
 
     val token = MutableLiveData<String>()
 
-    fun getUser(view: View, authToken: String) {
+    fun getUser(authToken: String) {
         keyValueStorage.token = authToken
         val response = repository.getUserInfo("Bearer $authToken")
         val thread = Thread {
@@ -23,11 +23,11 @@ class AuthViewModel constructor(private val repository: Repository, private val 
                 response.enqueue(object : Callback<UserInfo> {
                     override fun onResponse(call: Call<UserInfo>, response: Response<UserInfo>
                     ) {
+                        token.postValue("not")
                         response.body()?.let {
-                            setData(it, view)
+                            setData(it)
                             token.postValue(authToken)
                         }
-                        token.postValue("not")
                     }
 
                     override fun onFailure(call: Call<UserInfo>, t: Throwable) {
@@ -41,8 +41,14 @@ class AuthViewModel constructor(private val repository: Repository, private val 
         thread.start()
     }
 
-    fun setData(userInfo: UserInfo, view: View) {
+    fun setData(userInfo: UserInfo) {
         d("lol", "$userInfo")
         keyValueStorage.user = userInfo.login
+    }
+
+    fun getUserName(): String? = keyValueStorage.user
+
+    fun checkToken(token: String?){
+
     }
 }

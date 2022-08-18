@@ -1,4 +1,4 @@
-package com.example.apigithub.presenter.adapter
+package com.example.apigithub.viewModels.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,9 +7,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apigithub.R
 import com.example.apigithub.model.entities.Repo
-import com.example.apigithub.presenter.clicker.OnClickListener
 
-class GitHubAdapter(/*private val onClickListener: OnClickListener, */private val repoList: List<Repo>): RecyclerView.Adapter<GitHubAdapter.GitHubHolder>() {
+class RepoAdapter(/*private val onClickListener: OnClickListener, */private val repoList: List<Repo>): RecyclerView.Adapter<RepoAdapter.GitHubHolder>() {
 
     private var githubs: List<Repo> = repoList
 
@@ -33,7 +32,7 @@ class GitHubAdapter(/*private val onClickListener: OnClickListener, */private va
         fun bind(repo: Repo) {
 
             nameRepos.text = repo.nameRepos
-            description.text = repo.description
+            repo.description.let { description.text = it }
             language.text = repo.language
 
         }
