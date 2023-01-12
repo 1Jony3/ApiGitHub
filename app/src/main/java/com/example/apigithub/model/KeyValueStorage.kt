@@ -18,19 +18,18 @@ class KeyValueStorage constructor(context: Context) {
 
     var token: String? = null
         set(value) {
-            save(value, KEYS.NAME_TOKEN)
+            saveString(value, KEYS.NAME_TOKEN)
             field = value
         }
         get() = sharedPreferences.getString(KEYS.NAME_TOKEN, "")
-
     var user: String? = null
         set(value) {
-            save(value, KEYS.NAME_USERNAME)
+            saveString(value, KEYS.NAME_USERNAME)
             field = value
         }
         get() = sharedPreferences.getString(KEYS.NAME_USERNAME, "")
 
-    private fun save(value: String?, key: String) {
+    private fun saveString(value: String?, key: String) {
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
         editor.putString(key, value)
         editor.apply()

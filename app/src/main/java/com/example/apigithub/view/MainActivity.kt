@@ -7,7 +7,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.apigithub.R
-import com.example.apigithub.model.KeyValueStorage
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
@@ -23,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
+        d("lol", "hyita")
         return  navController.navigateUp() || super.onSupportNavigateUp()
     }
 }

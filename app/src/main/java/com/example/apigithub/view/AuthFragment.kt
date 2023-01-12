@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.apigithub.R
 import com.example.apigithub.databinding.FragmentAuthBinding
@@ -20,29 +20,36 @@ import com.example.apigithub.viewModels.auth.ViewModelFactory
 class AuthFragment : Fragment() {
 
     private lateinit var binding: FragmentAuthBinding
-    private lateinit var  viewModel: AuthViewModel
+
+    private  val viewModel: AuthViewModel by viewModels {
+        ViewModelFactory(
+            AppRepository(Common.retrofitService, KeyValueStorage(context!!.applicationContext))
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        d("lol", "auth")
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(
-                AppRepository(Common.retrofitService), KeyValueStorage(context!!.applicationContext))
-        ).get(AuthViewModel::class.java)
+        d("lol", "AuthFragment")
 
-        d("lol", "create viewModel")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_auth, container, false)
         binding = FragmentAuthBinding.bind(view)
         viewModel.token.observe(this, {
-            viewModel.checkToken(it)
+            d("lol", "token observe $it")
+            /*viewModel.checkToken()
+            viewModel.getUserLogin(binding.textInputEditText.text.toString())*/
+
         })
+        viewModel.state.observe(this, {
+            d("lol", "state observe $it")
+            if (it == AuthViewModel.State.Idle) openList(viewModel.getUserName()!!)
+        })
+
         binding.singIn.setOnClickListener {
-            viewModel.getUser(binding.textInputEditText.text.toString())
-            if (viewModel.token.value != "not") openList(viewModel.getUserName()!!)
+            viewModel.checkToken()
+            viewModel.getUserLogin(binding.textInputEditText.text.toString())
         }
         return view
     }

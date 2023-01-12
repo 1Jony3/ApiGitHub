@@ -73,6 +73,8 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:3.9.1")
     implementation("com.google.dagger:hilt-android:2.38.1")
     kapt("com.google.dagger:hilt-android-compiler:2.38.1")
+
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 }
 
 // Allow references to generated code

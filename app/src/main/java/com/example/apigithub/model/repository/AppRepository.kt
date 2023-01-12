@@ -1,10 +1,13 @@
 package com.example.apigithub.model.repository
 
+import com.example.apigithub.model.KeyValueStorage
 import com.example.apigithub.model.api.IGitHubAPI
-import com.example.apigithub.model.entities.Repo
-import retrofit2.Call
 
-class AppRepository constructor(private val gitHubApi: IGitHubAPI): Repository {//getRepositoriesList(key.user!!,"Bearer ${key.token}")
-    override fun getUserInfo(authHeader: String) = gitHubApi.getUserInfo(authHeader)
-    override fun getRepositories(login: String, token: String): Call<List<Repo>> = gitHubApi.getRepositoriesList(login,"Bearer $token")
+class AppRepository constructor(private val gitHubApi: IGitHubAPI, override var keyValueStorage: KeyValueStorage): Repository {
+    override suspend fun getRepositories() = gitHubApi.getRepositories(
+        userName = keyValueStorage.user!!,
+        authHeader = "Bearer ${keyValueStorage.token}"
+    )
+
+    override suspend fun signIn(authHeader: String) = gitHubApi.getUserInfo("Bearer $authHeader")
 }
