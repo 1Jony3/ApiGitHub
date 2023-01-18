@@ -1,7 +1,6 @@
 package com.example.apigithub.viewModels.auth
 
 import android.util.Log.d
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.apigithub.model.entities.UserInfo
@@ -10,7 +9,7 @@ import kotlinx.coroutines.*
 
 class AuthViewModel constructor(private val repository: Repository): ViewModel() {
 
-    val token = MutableLiveData<String>()
+    private val token = MutableLiveData<String>()
     private val errorMessage = MutableLiveData<String>()
     private val exceptionHandler =
         CoroutineExceptionHandler { _, throwable -> errorMessage.postValue(throwable.message) }
@@ -20,7 +19,6 @@ class AuthViewModel constructor(private val repository: Repository): ViewModel()
     init {
         d("lol", "AuthViewModel")
         repository.keyValueStorage.user = null
-
     }
 
     sealed interface State {
@@ -30,31 +28,19 @@ class AuthViewModel constructor(private val repository: Repository): ViewModel()
     }
 
 
-    /*fun onSignButtonPressed(authToken: String) {
-        job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val response = repository.signIn(authToken)
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-                    setKeyValue(response.body()!!, authToken)
-                    d("lol", "success and set key")
-                    token.postValue(authToken)
-                } else {
-                    errorMessage.postValue("Error ${response.message()}")
-                }
-        }
-        }
-    }*/
-    fun getUserLogin(authToken: String){
+    fun onSignButtonPressed() {
+        getUserLogin()
+    }
+    private fun getUserLogin(){
         val hz = CoroutineScope(Dispatchers.IO + exceptionHandler).async{
-            val response = repository.signIn(authToken)
+            val response = repository.signIn(token.value!!)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
-                    setKeyValue(response.body()!!, authToken)
+                    setKeyValue(response.body()!!, token.value!!)
                     d("lol", "success and set key")
-                    token.postValue(authToken)
                     ///
                     d("lol", "State.Idle")
-                    state.postValue(State.Idle)
+                    state.value = State.Idle
                 } else {
                     errorMessage.postValue("Error ${response.message()}")
                 }
@@ -72,9 +58,11 @@ class AuthViewModel constructor(private val repository: Repository): ViewModel()
 
     fun getUserName(): String? = repository.keyValueStorage.user
 
-    fun checkToken() {
+    fun checkToken(authToken: String) {
+        d("lol", " check token - $authToken")
+        //check token if ()
+        token.value = authToken
         d("lol", " check token - ${token.value}")
-        //check token
     }
 
     override fun onCleared() {

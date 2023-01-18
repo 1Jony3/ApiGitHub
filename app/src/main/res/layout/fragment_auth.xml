@@ -38,6 +38,7 @@
                 android:id="@+id/textInputEditText"
                 android:textCursorDrawable="@drawable/color_cursor"
                 app:boxStrokeColor="@color/greenMy"
+                android:singleLine="true"
                 android:fontFamily="sans-serif-condensed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
@@ -45,7 +46,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/singIn"
+        android:id="@+id/signIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/sign_in"

@@ -10,16 +10,16 @@
         android:label="AUTH"
         tools:layout="@layout/fragment_auth" >
         <action
-            android:id="@+id/action_authFragment_to_repositoriesListFragment2"
-            app:destination="@id/repositoriesListFragment2" />
+            android:id="@+id/action_authFragment_to_repositoriesListFragment"
+            app:destination="@id/repositoriesListFragment" />
     </fragment>
     <fragment
-        android:id="@+id/repositoriesListFragment2"
+        android:id="@+id/repositoriesListFragment"
         android:name="com.example.apigithub.view.RepositoriesListFragment"
         android:label="{userName}"
         tools:layout="@layout/repositories_list_fragment" >
         <action
-            android:id="@+id/action_repositoriesListFragment2_to_detailsFragment"
+            android:id="@+id/action_repositoriesListFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
         <argument
             android:name="userName"
@@ -28,6 +28,10 @@
     <fragment
         android:id="@+id/detailsFragment"
         android:name="com.example.apigithub.view.DetailInfoFragment"
-        android:label="detail_info_fragment"
-        tools:layout="@layout/detail_info_fragment" />
+        android:label="{repoName}"
+        tools:layout="@layout/detail_info_fragment">
+        <argument
+            android:name="repoName"
+            app:argType="string" />
+    </fragment>
 </navigation>

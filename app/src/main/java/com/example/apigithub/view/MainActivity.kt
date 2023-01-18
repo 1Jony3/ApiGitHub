@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        d("lol", "hyita")
+        d("lol", "navigateUp")
         return  navController.navigateUp() || super.onSupportNavigateUp()
     }
 }
