@@ -64,7 +64,6 @@ dependencies {
     implementation ("androidx.recyclerview:recyclerview:1.1.0")
     implementation ("androidx.recyclerview:recyclerview:1.2.0-alpha04")
     implementation ("androidx.constraintlayout:constraintlayout:2.0.4")
-    implementation ("com.github.siyamed:android-shape-imageview:0.9.+@aar")
 
     val lifecycleVersion = rootProject.extra["lifecycle_version"]
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
@@ -75,6 +74,7 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.38.1")
 
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
 }
 
 // Allow references to generated code

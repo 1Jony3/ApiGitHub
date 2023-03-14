@@ -20,7 +20,8 @@
         tools:layout="@layout/repositories_list_fragment" >
         <action
             android:id="@+id/action_repositoriesListFragment_to_detailsFragment"
-            app:destination="@id/detailsFragment" />
+            app:destination="@id/detailsFragment"
+            />
         <argument
             android:name="userName"
             app:argType="string" />

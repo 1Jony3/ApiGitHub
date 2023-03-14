@@ -10,7 +10,7 @@ import retrofit2.http.Path
 
 interface IGitHubAPI {
     @GET("user")
-    suspend fun getUserInfo(
+    suspend fun signIn(
         @Header("Authorization") authHeader: String
     ): Response<UserInfo>
 
@@ -26,4 +26,12 @@ interface IGitHubAPI {
         @Path("nameRepository") nameRepository: String,
         @Header("Authorization") authHeader: String
     ): Response<RepoDetails>
+//@Query("ref") branchName: String
+    @GET("repos/{userName}/{nameRepository}/contents/README.md?ref={branchName}")
+    suspend fun getRepositoryReadme(
+        @Path("userName") userName: String,
+        @Path("nameRepository") nameRepository: String,
+        @Path("branchName") branchName: String,
+        @Header("Authorization") authHeader: String
+    ): Response<String>
 }

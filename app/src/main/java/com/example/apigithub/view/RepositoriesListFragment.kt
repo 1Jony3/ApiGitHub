@@ -12,9 +12,7 @@ import com.example.apigithub.R
 import com.example.apigithub.databinding.RepositoriesListFragmentBinding
 import com.example.apigithub.model.KeyValueStorage
 import com.example.apigithub.model.api.Common
-import com.example.apigithub.model.entities.Repo
 import com.example.apigithub.model.repository.AppRepository
-import com.example.apigithub.viewModels.adapter.RepoAdapter
 import com.example.apigithub.viewModels.auth.ViewModelFactory
 import com.example.apigithub.viewModels.clicker.OnClickRepositoryListener
 import com.example.apigithub.viewModels.list.RepositoriesListViewModel
@@ -38,36 +36,37 @@ class RepositoriesListFragment : Fragment(R.layout.repositories_list_fragment) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("lol", "onCreate RepositoriesListFragment")
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("lol", "onViewCreated RepositoriesListFragment")
 
+        Log.d("lol", "nn details view created - ${findNavController().currentDestination}")
         binding = RepositoriesListFragmentBinding.bind(view)
         val layoutManager = LinearLayoutManager(view.context)
-        binding.repositoriesList.layoutManager = layoutManager
-
+        binding.list.layoutManager = layoutManager
         viewModel.getRepo()
 
         viewModel.repoList.observe(this, {
-            binding.repositoriesList.adapter = setAdapter(it)
-            Log.d("lol", "adapter")
+            if (viewModel.repoAdapter == null) viewModel.setAdapter(onClickListener, it)
+            binding.list.adapter = viewModel.repoAdapter
+            Log.d("lol", "viewModel.repoList.observe")
         })
-
-        Log.d("lol", "getRepo")
     }
 
-    private fun setAdapter(repo: List<Repo>) = RepoAdapter(onClickListener, repo)
-
     private fun openDetails(repoName: String){
+        Log.d("lol", "nn details - ${findNavController().currentDestination}")
         findNavController().navigate(
             R.id.action_repositoriesListFragment_to_detailsFragment,
-            bundleOf(DetailInfoFragment.ARG_REPO_NAME to repoName)
+            bundleOf(ARG_REPO_NAME to repoName)
         )
     }
 
     companion object{
-        const val ARG_USER_NAME = "userName"
+        const val ARG_REPO_NAME = "repoName"
     }
+
 
 }

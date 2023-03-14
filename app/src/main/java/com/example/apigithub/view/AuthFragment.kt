@@ -33,21 +33,38 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        d("lol", "ONViewCreated")
         binding = FragmentAuthBinding.bind(view)
-        viewModel.state.observe(this, {
-            d("lol", "state observe $it")
-            if (it == AuthViewModel.State.Idle) openList(viewModel.getUserName()!!)
+
+        /*viewModel.state.observe(this, {
+            d("lol", "state - ${viewModel.state.value}")
+            if (it == AuthViewModel.State.Loading)
+                openList(viewModel.getUserName()!!)
+        })*/
+        viewModel.message.observe(this, {
+            d("lol", "VTF-VTF")
+        })
+        viewModel.action.observe(this, {
+            d("lol", "action viewModel - ${viewModel.action.value}")
+            if (it == AuthViewModel.Action.RouteToMain)
+                openList(viewModel.getUserName()!!)
         })
         binding.signIn.setOnClickListener {
+            d("lol", "setOnClickListener")
             viewModel.checkToken(binding.textInputEditText.text.toString())
             viewModel.onSignButtonPressed()
         }
     }
 
     private fun openList(userName: String){
+        d("lol", "nn - ${findNavController().currentDestination}")
         findNavController().navigate(
             R.id.action_authFragment_to_repositoriesListFragment,
-            bundleOf(RepositoriesListFragment.ARG_USER_NAME to userName)
+            bundleOf(ARG_USER_NAME to userName)
         )
+    }
+
+    companion object{
+        const val ARG_USER_NAME = "userName"
     }
 }

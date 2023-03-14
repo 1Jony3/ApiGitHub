@@ -5,11 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/repositoriesListFragment"
+    android:id="@+id/repositoriesList"
     tools:context=".view.RepositoriesListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/repositoriesList"
+        android:id="@+id/list"
         android:clickable = "true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
