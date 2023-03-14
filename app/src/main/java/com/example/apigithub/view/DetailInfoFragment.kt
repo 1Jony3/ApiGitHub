@@ -33,10 +33,33 @@ class DetailInfoFragment: Fragment(R.layout.detail_info_fragment) {
         viewModel.getRepo(requireArguments().getString(ARG_REPO_NAME)!!)
 
         val holder = DetailsHolder(view)
-        viewModel.repo.observe(this, {
+
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            binding.progressBar.visibility =
+                if (state == RepositoryInfoViewModel.State.Loading) View.VISIBLE else View.GONE
+
+            binding.containerDetails.visibility =
+                if (state is RepositoryInfoViewModel.State.Loaded) View.VISIBLE else View.GONE
+
+            binding.errorView.visibility =
+                if (state is RepositoryInfoViewModel.State.Error) View.VISIBLE else View.GONE
+
+            binding.errorView.text = if (state is RepositoryInfoViewModel.State.Error) {
+                state.error
+            } else {
+                null
+            }
+
+            if (state is RepositoryInfoViewModel.State.Loaded){
+                holder.bind(state.githubRepo)
+            }
+
+        }
+
+        /*viewModel.repo.observe(this, {
             holder.bind(it)
             Log.d("lol", "holder")
-        })
+        })*/
 
     }
 }

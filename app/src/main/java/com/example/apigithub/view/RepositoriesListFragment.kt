@@ -2,6 +2,7 @@ package com.example.apigithub.view
 
 import android.os.Bundle
 import android.util.Log
+import android.util.Log.d
 import androidx.fragment.app.Fragment
 import android.view.View
 import androidx.core.os.bundleOf
@@ -13,6 +14,7 @@ import com.example.apigithub.databinding.RepositoriesListFragmentBinding
 import com.example.apigithub.model.KeyValueStorage
 import com.example.apigithub.model.api.Common
 import com.example.apigithub.model.repository.AppRepository
+import com.example.apigithub.viewModels.adapter.RepoAdapter
 import com.example.apigithub.viewModels.auth.ViewModelFactory
 import com.example.apigithub.viewModels.clicker.OnClickRepositoryListener
 import com.example.apigithub.viewModels.list.RepositoriesListViewModel
@@ -33,31 +35,51 @@ class RepositoriesListFragment : Fragment(R.layout.repositories_list_fragment) {
         )
     }
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         Log.d("lol", "onCreate RepositoriesListFragment")
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("lol", "onViewCreated RepositoriesListFragment")
-
-        Log.d("lol", "nn details view created - ${findNavController().currentDestination}")
         binding = RepositoriesListFragmentBinding.bind(view)
+
         val layoutManager = LinearLayoutManager(view.context)
         binding.list.layoutManager = layoutManager
         viewModel.getRepo()
 
-        viewModel.repoList.observe(this, {
-            if (viewModel.repoAdapter == null) viewModel.setAdapter(onClickListener, it)
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            binding.progressBar.visibility =
+                if (state == RepositoriesListViewModel.State.Loading) View.VISIBLE else View.GONE
+
+            binding.list.visibility =
+                if (state is RepositoriesListViewModel.State.Loaded) View.VISIBLE else View.GONE
+
+            binding.errorView.visibility =
+                if (state is RepositoriesListViewModel.State.Error) View.VISIBLE else View.GONE
+
+            binding.errorView.text = if (state is RepositoriesListViewModel.State.Error) {
+                state.error
+            } else {
+                null
+            }
+
+            viewModel.repoAdapter = if (state is RepositoriesListViewModel.State.Loaded) {
+                d("lol", "repoAdapter ${state.repos}")
+                RepoAdapter(onClickListener, state.repos)
+            } else {
+                RepoAdapter(onClickListener, emptyList())
+            }
+
             binding.list.adapter = viewModel.repoAdapter
-            Log.d("lol", "viewModel.repoList.observe")
-        })
+        }
     }
 
     private fun openDetails(repoName: String){
-        Log.d("lol", "nn details - ${findNavController().currentDestination}")
         findNavController().navigate(
             R.id.action_repositoriesListFragment_to_detailsFragment,
             bundleOf(ARG_REPO_NAME to repoName)
@@ -67,6 +89,4 @@ class RepositoriesListFragment : Fragment(R.layout.repositories_list_fragment) {
     companion object{
         const val ARG_REPO_NAME = "repoName"
     }
-
-
 }
