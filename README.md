@@ -7,7 +7,7 @@
     - :ballot_box_with_check:  статистика (forks, stars, watchers)
     - :ballot_box_with_check:  ссылка на web страницу репозитория
     - :ballot_box_with_check:  лицензия
-    - :black_square_button: readme
+    - :ballot_box_with_check: readme
 ## Технические требования
 - :ballot_box_with_check: Реализация на Kotlin
 - :ballot_box_with_check: Использовать XML Layouts для UI
@@ -25,8 +25,8 @@
 - :black_square_button: Использовать Dagger Hilt для внедрения зависимостей
 - :ballot_box_with_check: Сохранять токен авторизации в хранилище устройства - SharedPreferences
 - :ballot_box_with_check: Корректно обрабатывать ситуации "загрузка данных", "ошибка загрузки", "пустой список"
-- :black_square_button: Корректно обрабатывать смену конфигурации
-- :black_square_button: При перезапуске приложения авторизация должна сохраняться
+- :ballot_box_with_check: Корректно обрабатывать смену конфигурации
+- :ballot_box_with_check: При перезапуске приложения авторизация должна сохраняться
 - :ballot_box_with_check: Использовать локализацию для всех строк, показываемых пользователю
 - :ballot_box_with_check: Использовать векторную графику везде, где это возможно
 - :ballot_box_with_check: Обеспечить поддержку Android API 21
