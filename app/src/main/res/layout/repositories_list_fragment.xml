@@ -13,17 +13,19 @@
         android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
-        style="@style/Widget.MaterialComponents.BottomAppBar.PrimarySurface"
+        style="@android:style/Widget.Material.Light.ProgressBar.Large.Inverse"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminate="true"
         android:layout_gravity="center"
-        />
+        android:indeterminate="true"
+        android:visibility="invisible"
+        android:indeterminateDrawable="@drawable/progress_bar_style" />
     <TextView
         android:id="@+id/errorView"
         android:layout_width="wrap_content"

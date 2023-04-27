@@ -9,7 +9,7 @@
     android:paddingTop="16dp">
 
     <TextView
-        android:id="@+id/nameRep"
+        android:id="@+id/nameRepo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/name_rep"
@@ -30,7 +30,7 @@
         android:fontFamily="sans-serif-condensed"
         android:singleLine="false"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameRep"
+        app:layout_constraintTop_toBottomOf="@+id/nameRepo"
         />
     <TextView
         android:id="@+id/language"

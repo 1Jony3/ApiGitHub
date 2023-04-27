@@ -2,10 +2,12 @@ package com.example.apigithub.model
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log.d
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-
-class KeyValueStorage constructor(context: Context) {
+@Singleton
+class KeyValueStorage @Inject constructor(@ApplicationContext context: Context) {
 
     object KEYS{
         const val NAME_KEY = "KEY_VALUE_STORAGE"
@@ -33,6 +35,5 @@ class KeyValueStorage constructor(context: Context) {
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
         editor.putString(key, value)
         editor.apply()
-        d("lol", "save $value -> $key")
     }
 }

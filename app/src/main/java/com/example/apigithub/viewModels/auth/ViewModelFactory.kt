@@ -5,8 +5,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.apigithub.model.repository.Repository
 import com.example.apigithub.viewModels.details.RepositoryInfoViewModel
 import com.example.apigithub.viewModels.list.RepositoriesListViewModel
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ViewModelFactory constructor(private val repository: Repository):  ViewModelProvider.Factory{
+@Singleton
+class ViewModelFactory @Inject constructor(private val repository: Repository):  ViewModelProvider.Factory{
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         val viewModel = when (modelClass) {
             AuthViewModel::class.java -> {

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.apigithub">
 
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -10,9 +11,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ApiGitHub">
+        android:theme="@style/Theme.ApiGitHub"
+        android:name=".App">
         <activity
             android:name=".view.MainActivity"
+            android:windowSoftInputMode="adjustResize"
             android:label="@string/app_name"
             android:theme="@style/Theme.ApiGitHub">
             <intent-filter>

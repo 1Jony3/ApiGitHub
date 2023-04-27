@@ -1,5 +1,6 @@
 package com.example.apigithub.model.api
 
+import com.example.apigithub.model.entities.ReadMe
 import com.example.apigithub.model.entities.Repo
 import com.example.apigithub.model.entities.RepoDetails
 import com.example.apigithub.model.entities.UserInfo
@@ -9,6 +10,7 @@ import retrofit2.http.Header
 import retrofit2.http.Path
 
 interface IGitHubAPI {
+
     @GET("user")
     suspend fun signIn(
         @Header("Authorization") authHeader: String
@@ -26,12 +28,11 @@ interface IGitHubAPI {
         @Path("nameRepository") nameRepository: String,
         @Header("Authorization") authHeader: String
     ): Response<RepoDetails>
-//@Query("ref") branchName: String
-    @GET("repos/{userName}/{nameRepository}/contents/README.md?ref={branchName}")
+
+    @GET("repos/{userName}/{nameRepository}/readme")
     suspend fun getRepositoryReadme(
         @Path("userName") userName: String,
         @Path("nameRepository") nameRepository: String,
-        @Path("branchName") branchName: String,
         @Header("Authorization") authHeader: String
-    ): Response<String>
+    ): Response<ReadMe>
 }

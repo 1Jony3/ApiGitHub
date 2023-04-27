@@ -7,9 +7,12 @@ import androidx.lifecycle.ViewModel
 import com.example.apigithub.model.entities.Repo
 import com.example.apigithub.model.repository.Repository
 import com.example.apigithub.viewModels.adapter.RepoAdapter
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import javax.inject.Inject
 
-class RepositoriesListViewModel constructor(private val repository: Repository): ViewModel() {
+@HiltViewModel
+class RepositoriesListViewModel @Inject constructor(private val repository: Repository): ViewModel() {
 
     private val _repoList = MutableLiveData<List<Repo>>()
     val repoList: LiveData<List<Repo>> = _repoList
@@ -31,11 +34,8 @@ class RepositoriesListViewModel constructor(private val repository: Repository):
         object Empty : State
     }
 
-    init {
-        _state.postValue(State.Loading)
-    }
-
     fun getRepo() {
+        _state.postValue(State.Loading)
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             d("lol", "${repository.keyValueStorage.user!!}, ${repository.keyValueStorage.token!!}")
             val response = repository.getRepositories()
@@ -44,8 +44,6 @@ class RepositoriesListViewModel constructor(private val repository: Repository):
                     d("lol", "${response.body()}")
                     if (response.body() == null) _state.postValue(State.Empty)
                     else _state.postValue(State.Loaded(response.body()!!))
-
-                    //_repoList.postValue(response.body())
                 } else {
                     _state.postValue(State.Error("Error ${response.message()}"))
                 }

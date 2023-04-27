@@ -2,49 +2,63 @@ package com.example.apigithub.view
 
 import android.os.Bundle
 import android.util.Log.d
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.apigithub.R
 import com.example.apigithub.databinding.FragmentAuthBinding
-import com.example.apigithub.model.api.Common
-import com.example.apigithub.model.KeyValueStorage
-import com.example.apigithub.model.repository.AppRepository
 import com.example.apigithub.viewModels.auth.AuthViewModel
 import com.example.apigithub.viewModels.auth.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AuthFragment : Fragment(R.layout.fragment_auth) {
+
+    companion object{
+        const val ARG_USER_NAME = "userName"
+    }
 
     private lateinit var binding: FragmentAuthBinding
 
+    @Inject lateinit var viewModelFactory: ViewModelFactory
+
     private  val viewModel: AuthViewModel by viewModels {
-        ViewModelFactory(
-            AppRepository(Common.retrofitService, KeyValueStorage(context!!.applicationContext))
-        )
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+        viewModelFactory
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        d("lol", "$viewModelFactory")
+
         binding = FragmentAuthBinding.bind(view)
 
         binding.signIn.setOnClickListener {
-            viewModel.checkToken(binding.textInputEditText.text.toString())
-            viewModel.onSignButtonPressed()
+            val token = binding.textInputEditText.text.toString()
+            if (viewModel.checkToken(token)) viewModel.onSignButtonPressed()
+            else invalidToken()
         }
 
         lifecycleScope.launch {
             viewModel.actions.collect { handleAction(it) }
+        }
+
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            binding.progressBar.visibility =
+                if (state == AuthViewModel.State.Loading) View.VISIBLE else View.GONE
+            binding.errorView.visibility =
+                if (state is AuthViewModel.State.InvalidInput) View.VISIBLE else View.GONE
+            binding.errorView.text = if (state is AuthViewModel.State.InvalidInput) {
+                state.reason
+            } else {
+                null
+            }
         }
     }
 
@@ -62,11 +76,11 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         )
     }
 
-    private fun showError(message: String){
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    private fun invalidToken(){
+        binding.textInputLayout.error = "Invalid token"
     }
 
-    companion object{
-        const val ARG_USER_NAME = "userName"
+    private fun showError(message: String){
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 }

@@ -51,10 +51,9 @@ dependencies {
 
     val retrofitVersion = rootProject.extra["retrofit_version"]
     val glideVersion = rootProject.extra["glide_version"]
+    implementation ("com.squareup.okhttp3:okhttp:3.9.1")
     implementation ("com.squareup.retrofit2:retrofit:$retrofitVersion")
     implementation ("com.squareup.retrofit2:converter-gson:$retrofitVersion")
-    implementation ("com.github.bumptech.glide:glide:$glideVersion")
-    annotationProcessor ("com.github.bumptech.glide:compiler:$glideVersion")
 
     implementation ("androidx.fragment:fragment-ktx:1.4.1")
     implementation ("androidx.navigation:navigation-fragment-ktx:2.3.5")
@@ -63,17 +62,17 @@ dependencies {
 
     implementation ("androidx.recyclerview:recyclerview:1.1.0")
     implementation ("androidx.recyclerview:recyclerview:1.2.0-alpha04")
-    implementation ("androidx.constraintlayout:constraintlayout:2.0.4")
 
     val lifecycleVersion = rootProject.extra["lifecycle_version"]
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
 
-    implementation ("com.squareup.okhttp3:okhttp:3.9.1")
+
     implementation("com.google.dagger:hilt-android:2.38.1")
     kapt("com.google.dagger:hilt-android-compiler:2.38.1")
 
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
 
 }
 

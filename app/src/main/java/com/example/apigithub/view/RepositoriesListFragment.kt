@@ -1,82 +1,84 @@
 package com.example.apigithub.view
 
 import android.os.Bundle
-import android.util.Log
 import android.util.Log.d
-import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.apigithub.R
 import com.example.apigithub.databinding.RepositoriesListFragmentBinding
-import com.example.apigithub.model.KeyValueStorage
-import com.example.apigithub.model.api.Common
-import com.example.apigithub.model.repository.AppRepository
+import com.example.apigithub.viewModels.adapter.OnClickRepositoryListener
 import com.example.apigithub.viewModels.adapter.RepoAdapter
 import com.example.apigithub.viewModels.auth.ViewModelFactory
-import com.example.apigithub.viewModels.clicker.OnClickRepositoryListener
 import com.example.apigithub.viewModels.list.RepositoriesListViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class RepositoriesListFragment : Fragment(R.layout.repositories_list_fragment) {
 
+    companion object{
+        const val ARG_REPO_NAME = "repoName"
+    }
+
     private lateinit var binding: RepositoriesListFragmentBinding
+    private lateinit var adapter: RepoAdapter
 
-    private val onClickListener = object : OnClickRepositoryListener {
-        override fun onClick(github: String) {
-            openDetails(github)
-        }
+    @Inject lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel: RepositoriesListViewModel by viewModels {
+        viewModelFactory
     }
 
-    private  val viewModel: RepositoriesListViewModel by viewModels {
-        ViewModelFactory(
-            AppRepository(Common.retrofitService, KeyValueStorage(context!!.applicationContext))
-        )
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = RepositoriesListFragmentBinding.inflate(inflater, container, false)
+        adapter = RepoAdapter(object : OnClickRepositoryListener{
+            override fun onClick(github: String) {
+                openDetails(github)
+            }
 
+        })
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        Log.d("lol", "onCreate RepositoriesListFragment")
-
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding = RepositoriesListFragmentBinding.bind(view)
-
-        val layoutManager = LinearLayoutManager(view.context)
-        binding.list.layoutManager = layoutManager
         viewModel.getRepo()
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
-            binding.progressBar.visibility =
-                if (state == RepositoriesListViewModel.State.Loading) View.VISIBLE else View.GONE
+            if (viewLifecycleOwner.lifecycle.currentState == Lifecycle.State.RESUMED) {
 
-            binding.list.visibility =
-                if (state is RepositoriesListViewModel.State.Loaded) View.VISIBLE else View.GONE
+                binding.progressBar.visibility =
+                    if (state == RepositoriesListViewModel.State.Loading) View.VISIBLE else View.GONE
+                binding.list.visibility =
+                    if (state is RepositoriesListViewModel.State.Loaded) View.VISIBLE else View.GONE
+                binding.errorView.visibility =
+                    if (state is RepositoriesListViewModel.State.Error) View.VISIBLE else View.GONE
+                binding.errorView.text = if (state is RepositoriesListViewModel.State.Error) {
+                    state.error
+                } else {
+                    null
+                }
+                d("lol", "state ${viewModel.state} and ${viewModel.repoAdapter}")
 
-            binding.errorView.visibility =
-                if (state is RepositoriesListViewModel.State.Error) View.VISIBLE else View.GONE
+                viewModel.repoAdapter = setAdapter(state)
+                binding.list.adapter = adapter
 
-            binding.errorView.text = if (state is RepositoriesListViewModel.State.Error) {
-                state.error
-            } else {
-                null
             }
-
-            viewModel.repoAdapter = if (state is RepositoriesListViewModel.State.Loaded) {
-                d("lol", "repoAdapter ${state.repos}")
-                RepoAdapter(onClickListener, state.repos)
-            } else {
-                RepoAdapter(onClickListener, emptyList())
-            }
-
-            binding.list.adapter = viewModel.repoAdapter
         }
+
+        return binding.root
+    }
+
+    private fun setAdapter(state: RepositoriesListViewModel.State): RepoAdapter {
+        if (state is RepositoriesListViewModel.State.Loaded)
+            adapter.repos = state.repos
+        return adapter
     }
 
     private fun openDetails(repoName: String){
@@ -84,9 +86,5 @@ class RepositoriesListFragment : Fragment(R.layout.repositories_list_fragment) {
             R.id.action_repositoriesListFragment_to_detailsFragment,
             bundleOf(ARG_REPO_NAME to repoName)
         )
-    }
-
-    companion object{
-        const val ARG_REPO_NAME = "repoName"
     }
 }

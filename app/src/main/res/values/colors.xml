@@ -15,4 +15,5 @@
     <color name="yellowMy">#FAD876</color>
     <color name="greenMy">#68C768</color>
     <color name="azureMy">#9CFFF8</color>
+    <color name="transparent">#1C201FFF</color>
 </resources>

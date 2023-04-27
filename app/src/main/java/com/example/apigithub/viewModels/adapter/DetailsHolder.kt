@@ -1,6 +1,5 @@
 package com.example.apigithub.viewModels.adapter
 
-import android.util.Log.d
 import android.view.View
 import android.widget.TextView
 import com.example.apigithub.R
@@ -13,13 +12,14 @@ class DetailsHolder(itemView: View) {
     private val watchersCount: TextView = itemView.findViewById(R.id.yourWatchers)
     private val stargazersCount: TextView = itemView.findViewById(R.id.yourStar)
     private val license: TextView = itemView.findViewById(R.id.yourLicense)
+    private val readMe: TextView = itemView.findViewById(R.id.readMeDescription)
 
-    fun bind(repoDetails: RepoDetails) {
+    fun bind(repoDetails: RepoDetails, readMeContent: String?) {
         htmlURL.text = repoDetails.htmlURL
         forksCount.text = repoDetails.forksCount.toString()
         watchersCount.text = repoDetails.watchersCount.toString()
         stargazersCount.text = repoDetails.stargazersCount.toString()
         license.text = repoDetails.license
-        d("lol", "$repoDetails")
+        readMe.text = readMeContent
     }
 }
