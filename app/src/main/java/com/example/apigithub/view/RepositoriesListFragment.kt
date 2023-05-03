@@ -5,6 +5,7 @@ import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -45,7 +46,6 @@ class RepositoriesListFragment : Fragment(R.layout.repositories_list_fragment) {
             override fun onClick(github: String) {
                 openDetails(github)
             }
-
         })
 
         viewModel.getRepo()
@@ -57,13 +57,8 @@ class RepositoriesListFragment : Fragment(R.layout.repositories_list_fragment) {
                     if (state == RepositoriesListViewModel.State.Loading) View.VISIBLE else View.GONE
                 binding.list.visibility =
                     if (state is RepositoriesListViewModel.State.Loaded) View.VISIBLE else View.GONE
-                binding.errorView.visibility =
-                    if (state is RepositoriesListViewModel.State.Error) View.VISIBLE else View.GONE
-                binding.errorView.text = if (state is RepositoriesListViewModel.State.Error) {
-                    state.error
-                } else {
-                    null
-                }
+                if (state is RepositoriesListViewModel.State.Error)
+                    Toast.makeText(context, state.error, Toast.LENGTH_SHORT).show()
                 d("lol", "state ${viewModel.state} and ${viewModel.repoAdapter}")
 
                 viewModel.repoAdapter = setAdapter(state)

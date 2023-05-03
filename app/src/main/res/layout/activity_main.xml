@@ -10,4 +10,3 @@
     app:navGraph="@navigation/nav_graph"
     android:id="@+id/containerView"
     tools:context=".view.MainActivity"/>
-

@@ -1,5 +1,6 @@
 package com.example.apigithub.viewModels.details
 
+import android.util.Log.d
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -47,11 +48,12 @@ class RepositoryInfoViewModel @Inject constructor(private val repository: Reposi
                     else {
                         _state.postValue(State.Loaded(
                                 response.body()!!,
-                                "ReadMe not create"
+                                ""
                             )
                         )
                     }
 
+                    d("lol", "getRepository")
                 } else {
                     _state.postValue(State.Error("Error ${response.message()}"))
                 }
@@ -74,6 +76,7 @@ class RepositoryInfoViewModel @Inject constructor(private val repository: Reposi
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     _readmeState.postValue(ReadMeState.Loaded(response.body()!!.content!!))
+                    d("lol", "getRepositoryReadme")
 
                 } else {
                     if (response.body() == null) _readmeState.postValue(ReadMeState.Empty)

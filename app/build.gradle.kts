@@ -72,7 +72,7 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.38.1")
 
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
-
+    implementation ("org.commonmark:commonmark:0.17.2")
 
 }
 

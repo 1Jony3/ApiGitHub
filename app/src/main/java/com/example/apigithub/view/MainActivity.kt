@@ -20,10 +20,6 @@ class MainActivity : AppCompatActivity() {
         navController = navHost.navController
         NavigationUI.setupActionBarWithNavController(this, navController)
 
-        /*val src = "Some *Markdown*"
-        val flavour = CommonMarkFlavourDescriptor()
-        val parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(src)
-        val html = HtmlGenerator(src, parsedTree, flavour).generateHtml()*/
     }
 
     override fun onSupportNavigateUp(): Boolean {

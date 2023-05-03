@@ -2,7 +2,6 @@ package com.example.apigithub.model.repository
 
 import com.example.apigithub.model.KeyValueStorage
 import com.example.apigithub.model.api.Common
-import com.example.apigithub.model.api.IGitHubAPI
 import javax.inject.Inject
 import javax.inject.Singleton
 

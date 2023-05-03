@@ -2,7 +2,9 @@ package com.example.apigithub.viewModels.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
+import com.example.apigithub.R
 import com.example.apigithub.databinding.ItemRepositoriesBinding
 import com.example.apigithub.model.entities.Repo
 
@@ -28,6 +30,8 @@ class RepoAdapter (
     }
 
     override fun onBindViewHolder(holder: GitHubHolder, position: Int) {
+        holder.itemView.animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.recycle_view_anims)
+
         val repo = repos[position]
         holder.itemView.setOnClickListener {onClickListener.onClick(repo.nameRepos)}
         with(holder.binding){

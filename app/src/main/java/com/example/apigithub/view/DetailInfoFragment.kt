@@ -2,10 +2,10 @@ package com.example.apigithub.view
 
 import android.os.Bundle
 import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -25,7 +25,6 @@ class DetailInfoFragment: Fragment(R.layout.detail_info_fragment) {
 
     @Inject lateinit var viewModelFactory: ViewModelFactory
 
-
     private  val viewModel: RepositoryInfoViewModel by viewModels {
         viewModelFactory
     }
@@ -36,8 +35,6 @@ class DetailInfoFragment: Fragment(R.layout.detail_info_fragment) {
         savedInstanceState: Bundle?
     ): View {
         binding = DetailInfoFragmentBinding.inflate(inflater, container, false)
-
-        Log.d("lol", "$viewModelFactory")
 
         val nameRepository = requireArguments().getString(ARG_REPO_NAME)!!
 
@@ -61,15 +58,8 @@ class DetailInfoFragment: Fragment(R.layout.detail_info_fragment) {
                 binding.containerDetails.visibility =
                     if (state is RepositoryInfoViewModel.State.Loaded) View.VISIBLE else View.GONE
 
-                binding.errorView.visibility =
-                    if (state is RepositoryInfoViewModel.State.Error) View.VISIBLE else View.GONE
-
-                binding.errorView.text = if (state is RepositoryInfoViewModel.State.Error) {
-                    state.error
-                } else {
-                    null
-                }
-
+                if (state is RepositoryInfoViewModel.State.Error)
+                    Toast.makeText(context, state.error, Toast.LENGTH_SHORT).show()
                 if (state is RepositoryInfoViewModel.State.Loaded) {
                     holder.bind(state.githubRepo, decodeContext(state.readme))
                 }
@@ -78,6 +68,5 @@ class DetailInfoFragment: Fragment(R.layout.detail_info_fragment) {
         }
         return binding.root
     }
-
     private fun decodeContext(text: String) = String(Base64.decode(text, Base64.DEFAULT))
 }

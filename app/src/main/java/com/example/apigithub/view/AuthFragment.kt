@@ -17,6 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 class AuthFragment : Fragment(R.layout.fragment_auth) {
 
@@ -39,6 +40,8 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
         binding = FragmentAuthBinding.bind(view)
 
+        //binding.webBrowser.loadUrl("https://raw.githubusercontent.com/1Jony3/ApiGitHub/master/README.md")
+
         binding.signIn.setOnClickListener {
             val token = binding.textInputEditText.text.toString()
             if (viewModel.checkToken(token)) viewModel.onSignButtonPressed()
@@ -52,13 +55,9 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             binding.progressBar.visibility =
                 if (state == AuthViewModel.State.Loading) View.VISIBLE else View.GONE
-            binding.errorView.visibility =
-                if (state is AuthViewModel.State.InvalidInput) View.VISIBLE else View.GONE
-            binding.errorView.text = if (state is AuthViewModel.State.InvalidInput) {
-                state.reason
-            } else {
-                null
-            }
+
+            if (state is AuthViewModel.State.InvalidInput)
+                showError(state.reason)
         }
     }
 

@@ -26,14 +26,5 @@
         android:indeterminate="true"
         android:visibility="invisible"
         android:indeterminateDrawable="@drawable/progress_bar_style" />
-    <TextView
-        android:id="@+id/errorView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/error"
-        android:textSize="36dp"
-        android:visibility="invisible"
-        />
 
 </FrameLayout>
